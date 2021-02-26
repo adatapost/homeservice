@@ -10,10 +10,11 @@ class Db
    public function getCn() {
      return new mysqli($this->server, $this->user, $this->pass, $this->database, $this->port);
    }
-   public function queryAll($sql,$varFunc) {
+   public function queryAll($sql,$varFunc = null) {
        $mcn = $this->getCn();
        $st = $mcn->prepare($sql);
-       $varFunc($st);
+       if($varFunc)
+         $varFunc($st);
        $st->execute();
        $result = $st->get_result();
        return $result->fetch_all( MYSQLI_ASSOC);
