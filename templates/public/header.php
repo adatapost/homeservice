@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once "lib/all.php";
 $title = glb("title");
 $message = "";

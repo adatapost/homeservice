@@ -2,6 +2,14 @@
 $title = "Recover";
 include_once "templates/public/header.php";
 
+$ua = new UserAccount();
+$ua->userEmail = post("user_email");
+if($cmd == "Recover") {
+  $message=$ua->recoverPassword();
+  if(!$message) {
+    $message = "Email not found!!!";
+  }
+}
 
 
 ?>
@@ -12,7 +20,7 @@ include_once "templates/public/header.php";
     <form method="post" class="needs-validation" novalidate>
         <div class="mb-3">
             <label for="user_email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="user_email" required>
+            <input type="email" class="form-control" id="user_email" name="user_email" required>
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Invalid email</div>
         </div>

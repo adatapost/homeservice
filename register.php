@@ -1,6 +1,29 @@
 <?php 
 $title = "Register";
 include_once "templates/public/header.php";
+
+$ua = new UserAccount();
+
+$ua->userId = post("user_id");
+$ua->userEmail = post("user_email");
+$ua->userPass = post("user_pass");
+$userPassConfirm = post("user_pass_confirm");
+$ua->userMobile = post("user_mobile");
+$ua->roleId = post("user_category");
+$ua->created = toDay();
+$ua->acStatus = 1;
+if($cmd == "Register") {
+    if($ua->userPass == $userPassConfirm) {
+        $ua->userPass = passHash($ua->userPass);
+      if($ua->createUser()) {
+        $message = "User account created successfully!";
+       } else {
+        $message = "Sorry! Cannot create user account. Email or phone already taken!";
+       }
+    } else {
+        $message = "Password and confirm password cannot match! Reenter please";
+    }
+}
 ?>
 <div class="card row g-3 col-md-4 center">
   <h5 class="card-header"><?=$title?></h5>
@@ -34,9 +57,11 @@ include_once "templates/public/header.php";
         <div class="mb-5">
             <label for="user_category" class="form-check-label">User account type</label>
             <div class="form-check-inline">
-                <input type="radio" class="form-check-input" name="user_category" id="user_category" value="1" required />
+                <input type="radio" class="form-check-input" 
+                name="user_category" id="user_category" value="2" required />
                  Register as a Business
-                <input type="radio" class="form-check-input" name="user_category"  value="2" required/>
+                <input type="radio" class="form-check-input" 
+                name="user_category"  value="3" required/>
                  Register as Visitor
                 <div class="valid-feedback">Looks good!</div>
                 <div class="invalid-feedback">Select your user account type! Please!</div>

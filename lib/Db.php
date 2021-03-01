@@ -17,7 +17,9 @@ class Db
          $varFunc($st);
        $st->execute();
        $result = $st->get_result();
-       return $result->fetch_all( MYSQLI_ASSOC);
+       $r=$result->fetch_all( MYSQLI_ASSOC);
+     
+       return $r;
    }
    public function raw($sql,$varFunc) {
        $mcn = $this->getCn();
@@ -28,6 +30,8 @@ class Db
       $mcn = $this->getCn();
       $st = $mcn->prepare($sql);
       $varFunc($st);
-      return $st->execute();
+      $r=$st->execute();
+    
+      return $r;
    }
 }

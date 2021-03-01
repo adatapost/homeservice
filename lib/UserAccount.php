@@ -14,9 +14,16 @@ $countryName, $roleName;
         }
         // create a/c
         $sql="insert into user_account (user_email, user_pass, user_mobile, role_id,created,ac_status) values (?,?,?,?,?,?)";
-        return $db->nonQuery($sql,function($st) { 
+        if($db->nonQuery($sql,function($st) { 
             $st->bind_param("sssisi",$this->userEmail, $this->userPass, $this->userMobile, $this->roleId, $this->created,$this->acStatus);
-        });
+        })) {
+            $this->findUser();
+            $sql = "insert into user_profile (user_id,user_fullname) values (?,?)";
+            return $db->nonQuery($sql, function($st){
+                $st->bind_param("is",$this->userId,$this->userEmail);
+            });
+        }
+        return false;
     }
     public function deleteUser() {
         $db = new Db();
@@ -37,7 +44,7 @@ $countryName, $roleName;
             $this->userEmail = $r["user_email"];
             $this->userPass = $r["user_pass"];
             $this->userMobile = $r["user_mobile"];
-            $this->userRole = $r["user_role"];
+            $this->roleId = $r["role_id"];
             $this->created = $r["created"];
             $this->acStatus = $r["ac_status"];
         }
@@ -49,7 +56,8 @@ $countryName, $roleName;
             return false;
         }
         // update
-        $sql="update user_account set user_pass = ? where user_id=?";
+         
+        $sql="update user_account set user_pass=? where user_id=?";
         return $db->nonQuery($sql,function($st) { 
             $st->bind_param("si",$newPass,$this->userId);
         });
@@ -61,11 +69,14 @@ $countryName, $roleName;
         if(!$this->findUser()) { // stop if not exists
             return false;
         }
-        // Send password: email 
-        // Send("Your password is " . $u->userPass);
-        return true;
-
+        $plain = randomPlainPassword();
+        $this->userPass = passHash($plain);
+        $db->nonQuery("update user_account set user_pass=? where user_id=?", function($st) {
+            $st->bind_param("si",$this->userPass, $this->userId);
+        });
+        return "Your password is " . $plain;
     }
+
     public function allUsers($roleId) {
         $sql = "select * from user_account where role_id<>?";
         $db = new Db();
@@ -73,6 +84,7 @@ $countryName, $roleName;
             $st->bind_param("i",$roleId);
         });
     }
+    
     public function login($userPass) {
         $db = new Db();
         if(!$this->findUser()) { // stop if not exists

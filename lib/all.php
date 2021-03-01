@@ -1,18 +1,36 @@
 <?php
+  
   function post($key) { return empty($_POST[$key]) ? "" : $_POST[$key];  }
+  
   function get($key) { return empty($_GET[$key]) ? "" : $_GET[$key];  }
+  
   function cookie($key) { return empty($_COOKIE[$key]) ? "" : $_COOKIE[$key];  }
+    
   function session($key) { return empty($_SESSION[$key]) ? "" : $_SESSION[$key];  }
+
+  function setSession($key,$value) {
+    $_SESSION[$key] = $value;
+  }
+
+  function isAuth($roleId) {
+    if(session("roleId")!=$roleId) {
+       header("Location: /index.php");
+    }
+  }
+  
   function delSession($key) { if(session($key)) unset($_SESSION[$key]);  }
+
   function createCookie($key,$value,$time_sec=null) { 
      if($time_sec)
        setcookie($key,$value,$time_sec);
      else
        setcookie($key,$value);
   }
+  
   function delCookie($key) { 
      setcookie($key,$value,time()-1);
   }
+  
   function glb($key) { return empty($GLOBALS[$key]) ? "" : $GLOBALS[$key];  }
 
   function getCountryList($countryId=0) {
@@ -69,6 +87,30 @@
       
     }
   }
+
+  function now() {
+    $dt = new DateTime(null,new DateTimeZone("Asia/Kolkata"));
+    return $dt->format("Y-m-d h:i:s a");  // ISO Format
+  }
+  
+  function toDay() {
+     $dt = new DateTime(null,new DateTimeZone("Asia/Kolkata"));
+     return $dt->format("Y-m-d");  // ISO Format
+  }
+
+  function passHash($plain) {
+    return crypt($plain, '$2a$07$usesomesillystringforsalt$');
+  }
+
+  function passEqual($entered,$dbhash) {
+    return hash_equals($entered, $dbhash);
+  }
+
+  function randomPlainPassword() {
+    return bin2hex(random_bytes(5));
+  }
+
+
 
 
   
