@@ -32,7 +32,8 @@ if($cmd == "Register") {
     <form method="post" class="needs-validation" novalidate>
         <div class="mb-3">
             <label for="user_email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="user_email" name="user_email" required>
+            <input type="email" class="form-control" id="user_email" 
+            name="user_email" required>
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Email required</div>
         </div>
@@ -50,7 +51,8 @@ if($cmd == "Register") {
         </div>
         <div class="mb-3">
             <label for="user_mobile" class="form-label">Mobile</label>
-            <input type="tel" class="form-control" name="user_mobile" id="user_mobile" required>
+            <input type="tel" class="form-control" 
+            name="user_mobile" id="user_mobile" required>
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">Mobile is required</div>
         </div>

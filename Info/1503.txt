@@ -1,0 +1,4 @@
+Atleast 1 month (Schedule)
+
+1. Design the model classes 
+2. 

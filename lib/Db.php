@@ -18,7 +18,7 @@ class Db
        $st->execute();
        $result = $st->get_result();
        $r=$result->fetch_all( MYSQLI_ASSOC);
-     
+       
        return $r;
    }
    public function raw($sql,$varFunc) {
@@ -31,7 +31,6 @@ class Db
       $st = $mcn->prepare($sql);
       $varFunc($st);
       $r=$st->execute();
-    
       return $r;
    }
 }
